@@ -83,6 +83,13 @@ var _ = Describe("Podman run memory", func() {
 		Expect(session.OutputToString()).To(Equal("15"))
 	})
 
+	It("podman run memory-swap test", func() {
+		SkipIfCgroupV2()
+		session := podmanTest.Podman([]string{"run", "--memory-swap=-1", "--memory=2g", ALPINE})
+		session.WaitWithDefaultTimeout()
+		Expect(session.ExitCode()).To(Equal(0))
+	})
+
 	It("podman run kernel-memory test", func() {
 		SkipIfCgroupV2()
 		session := podmanTest.Podman([]string{"run", "--kernel-memory=40m", ALPINE, "cat", "/sys/fs/cgroup/memory/memory.kmem.limit_in_bytes"})
